@@ -1,0 +1,93 @@
+---
+title: "Project Part 3" 
+author: "Yama Baluch"
+fontsize: 12pt
+geometry: margin=1in
+urlcolor: black
+output: pdf_document
+header-includes:
+- \usepackage{setspace}
+- \onehalfspacing
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, highlight=FALSE)
+```
+
+
+```{r, echo=FALSE, include=FALSE}
+# For Part 1, use this chunk for reading in the data with a path that identifies you.
+library(readr)
+shootings <- read_csv("shootings.csv")
+View(shootings)
+
+```
+## Question
+Does the implementation of Body Cameras make a significant difference in the likelihood 
+of police brutality cases?
+
+## Data description
+A data set of all police killings from January 1st, 2015 to June 15th, 2020 will
+be used to answer this question. The data set is a population and was published
+by the Washington Post and is being constantly updated. The data set has 15 variables
+to describe and identify the victim and the incident. The two variables that will be of
+interest for this question are "Armed" and "body_camera," which identifies the type of
+weapon that the victim was carrying and if the officer involved with the incident was
+wearing a body camera. Since the question is about police brutality, we will focus on
+the victims whose Armed category was identified as "unarmed."  
+#Reference 1    
+
+## Generalization
+We will think of the population of unarmed victims as a sample of an even larger
+population. Looking at the population as a sample of a super population, the outcomes
+of the test statistic can be generalized to the population of police brutality victims
+from the years 2021 to 2023. Beyond that, their is no telling how the future of body
+camera usage will be like. If more funding is put into police body camera programs, the
+data will change drastically and it is possible that more incidents will involve body
+cameras due to them becoming more prominent.
+
+## Test selection
+A left-sided one sample z-test for proportions will be used to answer the question. This
+is the most appropriate test because it is used to test characteristics of a population.
+The characteristic being tested in this case would be whether or not the officers were
+wearing a body camera. For this test, we will think of the population of unarmed victims
+as the sample. The population that our sample will be representing will be the super
+population and will include unarmed victims in the years from 2021 to 2023. In terms of
+assumption checking, there were at least 5 successes and at least 5 failures, so the data
+set meets the requirements of the test. A success in this case would be defined as "True"
+the officer was wearing a body camera, while a failure would be defined as "False" they
+were not wearing a body camera.  
+The null hypothesis for this test will be that, on average, the proportion of police brutality
+incidents that involved police that wore body cameras is 50%. The alternative hypothesis will
+be that, on average, the proportion of police brutality incidents that involved police that wore
+body cameras is less than 50%.
+```{r}
+Unarmed<-shootings[ which(shootings$armed=="unarmed"), ]
+table(Unarmed$body_camera)
+z.prop<-prop.test(55,348,p=0.50,alternative="less", correct=FALSE)
+z.prop
+phat <- 55/348
+z <- (phat-0.5)/sqrt(0.5*0.5/348)
+z
+p.value <- pnorm(z)
+p.value
+sqrt(z.prop$statistic)
+z.prop$p.value
+```
+## Conclusion
+From the 348 unarmed victims, 55 were killed by officers wearing body cameras. The
+proportion of these incidents were 15.87%. The proportion of incidents that involved
+police with body cameras was less than the proportion of incidents that did not involve
+body cameras, which gives us reasonable evidence that the implementation of body cameras
+make a significant difference in the likelihood of police brutality cases.  
+Since all recorded police brutality incidents from the years 2015 to 2020 were taken into account, I would
+say that our findings were very representative of the effects of officers wearing body cameras.
+We could generalize that from the years 2021 to 2023, around 16% of all police brutality incidents would
+involve an officer wearing a body camera. There could be drastic changes to police departments in the years
+beyond that. If more police departments implement body cameras, the proportion of incidents with body cameras
+would likely increase due to there being more officers wearing body cameras than officers not wearing body
+cameras.
+
+
+## References
+1. <https://www.kaggle.com/ahsen1330/us-police-shootings>.
